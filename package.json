@@ -1,0 +1,37 @@
+{
+  "name": "twitchy",
+  "version": "0.0.0",
+  "description": "Creator Coins / Rally Twitch Bot",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheRocketCat/twitchy.git"
+  },
+  "keywords": [
+    "CreatorCoin",
+    "Rally",
+    "Twitch",
+    "Bot",
+    "Streaming"
+  ],
+  "author": "RocketCat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheRocketCat/twitchy/issues"
+  },
+  "homepage": "https://github.com/TheRocketCat/twitchy#readme",
+  "dependencies": {
+    "tmi.js": "^1.7.1",
+    "ts-results": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.27",
+    "@types/tmi.js": "^1.7.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  }
+}

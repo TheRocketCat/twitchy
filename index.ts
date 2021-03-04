@@ -1,47 +1,32 @@
 import * as tmi from "tmi.js"
+import {
+    Result ,Ok ,Err
+    ,Option ,Some ,None
+} from "ts-results"
 
-// Define configuration options
-const opts = {
-  identity: {
-    username: "DaRocketCat",
-    password: process.env.OUTH
-  },
-  channels: [
-    "darockecat"
-  ]
-};
-// Create a client with our options
-const client = new tmi.client(opts);
+import {IClient,IToString} from "./shared/interfaces"
+import {TSC} from "./TwitchClientSingleton"
+import {AutoMsgPrinter} from "./information/AutoMsgPrinter"
+import {createCommandHandler} from "./commandHandler"
+//handlers
+import {createNewAutoMsgHandler} from "./information/twitchApi"
+import {getCoinCountHandler, getCoinPriceHandler} from "./rally/twitchApi"
 
-// Register our event handlers (defined below)
-client.on('message', onMessageHandler);
-client.on('connected', onConnectedHandler);
+const autoMsgPrinter=new AutoMsgPrinter(TSC.client, 5)
 
-// Connect to Twitch:
-client.connect();
+//TODO
+/**
+ * get channels joined when started
+ */
 
-// Called every time a message comes in
-function onMessageHandler (target, context, msg, self) {
-  //if (self) { return; } // Ignore messages from the bot
 
-  // Remove whitespace from chat message
-  const commandName = msg.trim();
+//TODO
+//whisper commands
+TSC.init();
+TSC.client.on('connected', onConnectedHandler);
 
-  // If the command is known, let's execute it
-  if (commandName === '!dice') {
-    const num = rollDice();
-    client.say(target, `You rolled a ${num}`);
-    console.log(`!dice result * Executed ${commandName} command`);
-  } else {
-    console.log(`* Unknown command ${commandName}`);
-  }
-}
-// Function called when the "dice" command is issued
-function rollDice () {
-  const sides = 6;
-  return Math.floor(Math.random() * sides) + 1;
-}
-// Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port) {
+  TSC.client.on('message', createCommandHandler(TSC.client));
+  autoMsgPrinter.start()
   console.log("im vibing!")
 }

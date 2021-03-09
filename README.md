@@ -37,6 +37,34 @@ Command: !coinPrice [coin symbol]
 The best code is that which optimizes for productivity, readability,
 stability and speed.
 
+## ts-results
+To increase stability, and code production, we use ts-results; a
+library inspired by rusts results library.
+It is great to increase the readability and understanding of
+function signatures. We mainly use this instead of throwing errors
+at people.
+```Javascript
+//DONT
+function badFunc():number{
+	if(1+1 != 3){
+		throw new Error("im dumb")
+	}
+}
+//DO
+function goodFunc():Result<number,Error>{
+	if(1+1 == 2){
+		return Ok(2)
+	}else{
+		return Err(new Error("smarty pants"))
+	}
+}
+
+```
+Imagine, you didnt have to go read a giant function, or
+boring documentation, to make sure the dope of a JS function
+you about to use wont throw feacies (errors for monoglots) at 
+you like a lab monkey. Thats why you use ts-results, or gtfo.
+
 ### Splitting lines
 #### The ,
 When you split lines the split lines should start with , instead

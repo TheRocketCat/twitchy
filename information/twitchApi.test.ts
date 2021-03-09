@@ -6,23 +6,14 @@ import {
 
 import {
     createNewAutoMsgHandler
-    ,testables
+	,
 } from "./twitchApi"
 import {WrongAmountOfArgsError} from "../shared/errors"
 
-const {extractCommandArgs} = testables
 
 //mocks
 const channel="x"
 const userstate:tmi.Userstate={ username:"x" }
-
-test("no arguments",async ()=>{
-    const msg="!createNewAutoMsg"
-
-    const res=extractCommandArgs(msg)
-    expect(res.err).toBe(false)
-    expect(res.unwrap()).toBe(None)
-})
 
 test("wrong argument length",async ()=>{
     let msg="!createNewAutoMsg hsj ow 1"

@@ -5,14 +5,8 @@ const {Response} = jest.requireActual("node-fetch")
 
 import {Client} from "tmi.js"
 
-import {
-    Result ,Ok ,Err
-    ,Option ,Some ,None
-} from "ts-results"
-
-
-import {IClient,IToString} from "./shared/interfaces"
 import {CreatorCoinPrice,Balance} from "./rally/types"
+
 //TESTED
 import {createCommandHandler} from "./commandHandler"
 
@@ -21,10 +15,10 @@ const COIN_SYMBOL="RocketCat";
 const MOCK_USERSTATE={
     username:"RocketCat"
 }
-const CHANNEL=MOCK_USERSTATE.username //testing my own CHANNEL
+const CHANNEL=MOCK_USERSTATE.username
 const CMD_HANDLER=createCommandHandler(new Client({}))
 
-test("integration !coinPrice {coin symbol}",async ()=>{
+test("!coinPrice {coin symbol}",async ()=>{
     (fetch as unknown as jest.Mock)
     .mockReturnValue(Promise.resolve(new Response(`
         {
@@ -47,7 +41,7 @@ test("integration !coinPrice {coin symbol}",async ()=>{
     expect(unwrap.priceInRLY).toBe(2)
 })
 
-test("integration !coinCount {coin symbol}",async ()=>{
+test("!coinCount {coin symbol}",async ()=>{
     (fetch as unknown as jest.Mock)
     .mockReturnValue(Promise.resolve(new Response(`
         {
@@ -69,7 +63,7 @@ test("integration !coinCount {coin symbol}",async ()=>{
     expect(unwrap).toBe(4)
 })
 
-test("integration !balance {id}",async ()=>{
+test("!balance {id}",async ()=>{
     (fetch as unknown as jest.Mock)
     .mockReturnValue(Promise.resolve(new Response(`
         [
@@ -105,7 +99,7 @@ test("integration !balance {id}",async ()=>{
     expect(STANZ.estimatedInUsd).toBe(8)
 })
 
-test("integration !volume [coin symbol]",async ()=>{
+test("!volume [coin symbol]",async ()=>{
     (fetch as unknown as jest.Mock)
     .mockReturnValue(Promise.resolve(new Response(`
         {
@@ -127,7 +121,7 @@ test("integration !volume [coin symbol]",async ()=>{
     expect(unwrap).toBe(517)
 })
 
-test("integration !createInfoCmd",async ()=>{
+test("!createInfoCmd",async ()=>{
     let cmdRes=await CMD_HANDLER(
         CHANNEL
         ,MOCK_USERSTATE

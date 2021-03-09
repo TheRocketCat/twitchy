@@ -4,7 +4,6 @@ import {
     ,Option ,Some ,None
 } from "ts-results"
 
-import {TSC} from "./TwitchClientSingleton"
 import {isOwner} from "./auth"
 
 import {IClient,IToString} from "./shared/interfaces"
@@ -16,6 +15,13 @@ import {
   ,getBalanceHandler
   ,getVolumeHandler
 } from "./rally/twitchApi"
+//information
+import {
+	createInfoCommandHandler
+	,getInfoCommandHandler
+	,updateInfoCommandHandler
+	,deleteInfoCommandHandler
+} from "./information/twitchApi"
 
 export function createCommandHandler(client:IClient)
 :(channel:string,userstate:Userstate,msg:string)=>Promise<Result<IToString | string | void,Error>>{
@@ -36,6 +42,7 @@ export function createCommandHandler(client:IClient)
 
     //TODO handle command results
     let cmdResult:Result<IToString | string | void ,Error>
+	//standard commands
     switch(commandName){
       case "!createAutoMsg":
         cmdResult=await createNewAutoMsgHandler(channel,userstate,msg);
@@ -52,16 +59,26 @@ export function createCommandHandler(client:IClient)
       case "!volume":
         cmdResult=await getVolumeHandler(msg)
         break
-      default:
-        if(isOwner(channel, userstate)) return Ok.EMPTY
-        client.whisper(userstate.username,"no such command")
-        return Err(new Error("no such command"))
+      case "!createInfoCommand":
+			cmdResult=await createInfoCommandHandler(channel,userstate, msg)
+		break
+		case "!updateInfoCmd":
+			cmdResult=await updateInfoCommandHandler(channel,userstate, msg)
+			break
+		case "!deleteInfoCmd":
+			cmdResult=await deleteInfoCommandHandler(channel,userstate, msg)
+			break
     }
-    if(cmdResult.err){
-        console.error(cmdResult.val)
-    }
+	//check custom commands
+	if(cmdResult==undefined){
+		cmdResult=await getInfoCommandHandler(channel,msg)
+		if(cmdResult.err){
+			client.whisper(userstate.username,"no such command")
+			return Err(new Error("no such command"))
+		}
+	}
     client.say(channel,makeResponseString(cmdResult))
-    return cmdResult
+    return Ok(cmdResult)
   }
 }
 

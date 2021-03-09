@@ -1,18 +1,25 @@
-import * as tmi from "tmi.js"
+import {Userstate} from "tmi.js"
+import * as Joi from "joi"
 import {
     Result ,Ok ,Err
     ,Option ,Some ,None
 } from "ts-results"
 
-import {TSC} from "../TwitchClientSingleton"
-import {createNewAutoMsg} from "./AutoMsgWorkflows"
 import {isOwner,UnauthorizedError} from "../auth"
 import {WrongAmountOfArgsError} from "../shared/errors"
-
-//HANDLERS
+import {extractCommandArgs} from "../shared/utilities/args"
+import {InfoCommand} from "./InfoCommand"
+//workflows
+import {createNewAutoMsg} from "./AutoMsgWorkflows"
+import {
+	createInfoCommandWorkflow
+	,getInfoCommandWorkflow
+	,deleteInfoCommandWorkflow
+	,updateInfoCommandWorkflow
+} from "./infoCommandWorkflow"
 
 //!createNewAutoMsg "{message}" {interval in minutes}
-export async function createNewAutoMsgHandler(channel:string,userstate:tmi.Userstate,msg:string)
+export async function createNewAutoMsgHandler(channel:string,userstate:Userstate,msg:string)
 :Promise<Result<void,Error>>{
     try{
         if(isOwner(channel,userstate)==false){
@@ -40,22 +47,64 @@ export async function createNewAutoMsgHandler(channel:string,userstate:tmi.Users
     }
 }
 
-//extracts strings and numbers into args
-function extractCommandArgs(cmd:string):Result<Option<string[]>,Error>{
-    try{
-        const match=cmd.match(/[0-9]+|\".*\"/g)
-        if(match == null){
-            return Ok(None)
+export async function createInfoCommandHandler(channel:string,userstate:Userstate, msg:string)
+:Promise<Result<void,Error>>{
+	try{
+        if(isOwner(channel,userstate)==false){
+            return Err(new UnauthorizedError())
         }
-        else if(match.length > 0){
-            return Ok(Some(match))
-        }else return Ok(None)
-    }catch(e){
-        return Err(e)
-    }
+		const unverifiedArgs=extractCommandArgs(msg)
+			.expect("bad arguments")
+			.expect("no arguments given");
+
+		//this function ensures type safety ?
+		const args:Array<any>=Joi.attempt(unverifiedArgs ,Joi.array().items(
+			Joi.string().required()
+			,Joi.string().required()
+			,Joi.number()
+	   ))
+	
+		return createInfoCommandWorkflow(channel,args[0],args[1],args[2])
+	}catch(e){
+		return Err(e)
+	}
+}
+export async function updateInfoCommandHandler(channel:string,userstate:Userstate,msg:string)
+:Promise<Result<void,Error>>{
+	try{
+		if(isOwner(channel,userstate)==false){
+			return Err(new UnauthorizedError())
+		}
+		
+		const unverifiedArgs=extractCommandArgs(msg)
+		const args = Joi.attempt(unverifiedArgs,Joi.array().items(
+			Joi.string().alphanum().required()
+			,Joi.string().required()
+			,Joi.number().integer().greater(1)
+		));
+
+
+		updateInfoCommandWorkflow(channel,args[0],args[1],args[2])
+	}catch(e){return Err(e)}
 }
 
-//exported for testing only
-export const testables={
-    extractCommandArgs
+export async function deleteInfoCommandHandler(channel:string,userstate:Userstate,msg:string)
+:Promise<Result<void,Error>>{
+	try{
+		if(isOwner(channel,userstate)==false){
+			return Err(new UnauthorizedError())
+		}
+		const unverifiedArgs=extractCommandArgs(msg)
+		const args = Joi.attempt(unverifiedArgs,Joi.array().items(
+			Joi.string().alphanum().required()
+		));
+
+		deleteInfoCommandWorkflow(channel,args[0])
+	}catch(e){return Err(e)}
+}
+
+export async function getInfoCommandHandler(channel:string, msg:string)
+:Promise<Result<InfoCommand,Error>>{
+	//call with remove command symbol
+	return getInfoCommandWorkflow(channel,msg.substring(1))
 }

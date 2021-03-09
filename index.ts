@@ -1,16 +1,11 @@
-import * as tmi from "tmi.js"
-import {
-    Result ,Ok ,Err
-    ,Option ,Some ,None
-} from "ts-results"
-
-import {IClient,IToString} from "./shared/interfaces"
-import {TSC} from "./TwitchClientSingleton"
-import {AutoMsgPrinter} from "./information/AutoMsgPrinter"
+import {TSC} from "./shared/twitchClientSingleton"
+import {AutoMsgPrinter} from "./information/autoMsgPrinter"
 import {createCommandHandler} from "./commandHandler"
-//handlers
-import {createNewAutoMsgHandler} from "./information/twitchApi"
-import {getCoinCountHandler, getCoinPriceHandler} from "./rally/twitchApi"
+
+import * as mongoose from "mongoose"
+
+//TODO add pass
+mongoose.connect('mongodb://localhost:27017/twitchy', {useNewUrlParser: true});
 
 const autoMsgPrinter=new AutoMsgPrinter(TSC.client, 5)
 

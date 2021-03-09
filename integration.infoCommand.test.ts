@@ -3,8 +3,8 @@ import {Client} from "tmi.js"
 
 import * as mongoose from "mongoose"
 
-//TESTED
 import {createCommandHandler} from "./commandHandler"
+
 beforeAll(async ()=>{
 	return mongoose.connect("mongodb://localhost:27017/test",{useNewUrlParser:true,useUnifiedTopology:true})
 })

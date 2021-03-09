@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose"
+import {Schema, model} from "mongoose"
 
 const infoCommandSchema=new Schema({
     cmd:String
@@ -7,4 +7,4 @@ const infoCommandSchema=new Schema({
     ,throttle:Number
 })
 
-export const InfoCommandModel=mongoose.model("InfoCommand",infoCommandSchema)
+export const InfoCommandModel=model("InfoCommand",infoCommandSchema)

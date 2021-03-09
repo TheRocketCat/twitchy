@@ -94,11 +94,11 @@ example:
 //DONT
 x()
 .y()
-z()
+.z()
 //DO
 x()
-	y()
-	z();
+	.y()
+	.z();
 ```
 
 Long, dont read:

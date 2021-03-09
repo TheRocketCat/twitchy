@@ -60,6 +60,12 @@ export class InfoCommand{
 
 
     static create(channel:string,cmd:string,info:string,throttle?:number):Result<InfoCommand,Error>{
+		const firstLet=cmd.charAt(0)
+		const match=firstLet.match(/[a-zA-Z]/)
+		if(match.index==null){
+			return Err(new Error("commands cant start with cmd symbold"))
+		}
+
         return Ok(new InfoCommand(channel,cmd,info,throttle))
     }
 

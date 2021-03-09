@@ -1,6 +1,8 @@
 import {InfoCommand} from "./infoCommand"
 import * as mongoose from "mongoose"
 
+import {Ok,Err} from "ts-results"
+
 beforeAll(async ()=>{
 	return mongoose.connect("mongodb://localhost:27017/test",{useNewUrlParser:true,useUnifiedTopology:true})
 })
@@ -24,6 +26,10 @@ describe("InfoCommand",()=>{
 		expect(INFO_COMMAND.cmd).toBe(CMD)
 		expect(INFO_COMMAND.info).toBe(INFO)
 		expect(INFO_COMMAND.throttle).toBe(THROTTLE)
+	})
+	test("create starting with cmd symbol", ()=>{
+		const res=InfoCommand.create(CHANNEL,CMD,INFO,THROTTLE)
+		expect(res).not.toBe(Err(new Error("commands cant start with cmd symbold")))
 	})
 	test("save",async ()=>{
 		const res=await INFO_COMMAND.save()

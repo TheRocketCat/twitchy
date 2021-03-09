@@ -38,6 +38,7 @@ The best code is that which optimizes for productivity, readability,
 stability and speed.
 
 ### Splitting lines
+#### The ,
 When you split lines the split lines should start with , instead
 of end with , .
 example:
@@ -58,6 +59,27 @@ const o={
 It allows for a faster editing of those lines.
 Im dead serious about this convention. When splitting lines, split thously or i'll split your head.
 (PS: this is the haskell way, so at least i got the mathematicians on my lazy ass side)
+#### Chaining functions (about ;)
+TLDR; Indent, and end chain with ;
+example:
+```Javascript
+//DONT
+x()
+.y()
+z()
+//DO
+x()
+	y()
+	z();
+```
+
+Long, dont read:
+When chaining functions , to end the sequence, this is to avoid
+typescript from tripping over itself. Otherwise, referering back to
+the policy of PRSS (productivity, readability, stability, speed), we
+dont end lines with ; , because its not strictly needed, and saves us
+1 keystroke. In terms of optimization, it runs slightly faster with ;,
+but the typescript compiler handle that.
 
 ## Auto Formatting
 TODO, cmon rocket get on the case

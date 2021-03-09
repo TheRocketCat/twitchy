@@ -4,7 +4,7 @@ import {
 } from "ts-results"
 import {Document} from "mongoose"
 
-import {InfoCommand} from "./InfoCommand"
+import {InfoCommand} from "./infoCommand"
 
 export async function createInfoCommandWorkflow(channel:string,cmd:string,info:string,throttle?:number)
 :Promise<Result<void,Error>>{

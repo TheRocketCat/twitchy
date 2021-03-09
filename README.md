@@ -37,7 +37,7 @@ Command: !coinPrice [coin symbol]
 ### Setup
 
 #### Mocks
-#### channel
+##### channel
 channels nammes must be lowercase and start with #.
 example:
 ```

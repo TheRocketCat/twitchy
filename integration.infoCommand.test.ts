@@ -2,21 +2,23 @@ jest.mock("tmi.js")
 import {Client} from "tmi.js"
 
 import * as mongoose from "mongoose"
+import {Ok} from "ts-results"
 
 import {createCommandHandler} from "./commandHandler"
+import {InfoCommand} from "./information/infoCommand"
 
 beforeAll(async ()=>{
 	return mongoose.connect("mongodb://localhost:27017/test",{useNewUrlParser:true,useUnifiedTopology:true})
 })
 afterAll(async ()=>{
-	//await mongoose.connection.dropDatabase()
+	await mongoose.connection.dropDatabase()
 	return mongoose.connection.close()
 })
 //GLOBALS
 const MOCK_USERSTATE={
 	username:"RocketCat"
 }
-const CHANNEL=MOCK_USERSTATE.username
+const CHANNEL="#"+MOCK_USERSTATE.username.toLowerCase()
 const RAW_CMD_HANDLER=createCommandHandler(new Client({}))
 const DEFAULT_CMD_HANDLER=function(msg:string){
 	return createCommandHandler(new Client({}))(CHANNEL,MOCK_USERSTATE,msg)
@@ -33,14 +35,13 @@ describe("InfoCommand Integration",()=>{
 			`!createInfoCommand ${CMD} ${INFO_UNPROCESSED} ${THROTTLE}`
 		)
 
-		expect(cmdRes.val).not.toHaveProperty("message")
+		expect(cmdRes.val).toBe(Ok.EMPTY)
 	})
 	test(`!${CMD}`,async()=>{
 		let cmdRes=await DEFAULT_CMD_HANDLER(`!${CMD}`)
-		console.log(cmdRes)
-		expect(cmdRes.val).not.toHaveProperty("message")
-		let info=cmdRes.unwrap()
-		expect(cmdRes.val).not.toHaveProperty("message")
+
+		expect(cmdRes)
+		.toBe(Ok(InfoCommand.create(CHANNEL,CMD,INFO_PROCESSED,THROTTLE)));
 	})
 	test(`!${CMD} wrong channel`,async()=>{
 		let cmdRes=await RAW_CMD_HANDLER("wrongChannel", MOCK_USERSTATE, `!${CMD}`)

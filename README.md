@@ -33,6 +33,35 @@ Command: !coinPrice [coin symbol]
 ```
 
 # Contributing
+## Conventions i'll defeand to my death
+The best code is that which optimizes for productivity, readability,
+stability and speed.
+
+### Splitting lines
+When you split lines the split lines should start with , instead
+of end with , .
+example:
+```Javascript
+//not like this
+const o={
+	x:1,
+	y:2,
+	z:3
+}
+//like this
+const o={
+	x:1
+	,y:2
+	,z:3
+}
+```
+It allows for a faster editing of those lines.
+Im dead serious about this convention. When splitting lines, split thously or i'll split your head.
+(PS: this is the haskell way, so at least i got the mathematicians on my lazy ass side)
+
+## Auto Formatting
+TODO, cmon rocket get on the case
+
 ## Tests
 ### Setup
 

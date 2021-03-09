@@ -2,7 +2,7 @@ jest.mock("tmi.js")
 import {Client} from "tmi.js"
 
 import * as mongoose from "mongoose"
-import {Ok} from "ts-results"
+import {Ok,Err} from "ts-results"
 
 import {createCommandHandler} from "./commandHandler"
 import {InfoCommand} from "./information/infoCommand"
@@ -35,13 +35,13 @@ describe("InfoCommand Integration",()=>{
 			`!createInfoCommand ${CMD} ${INFO_UNPROCESSED} ${THROTTLE}`
 		)
 
-		expect(cmdRes.val).toBe(Ok.EMPTY)
+		expect(cmdRes).toBe(Ok.EMPTY)
 	})
 	test(`!${CMD}`,async()=>{
 		let cmdRes=await DEFAULT_CMD_HANDLER(`!${CMD}`)
 
 		expect(cmdRes)
-		.toBe(Ok(InfoCommand.create(CHANNEL,CMD,INFO_PROCESSED,THROTTLE)));
+		.toStrictEqual(InfoCommand.create(CHANNEL,CMD,INFO_PROCESSED,THROTTLE));
 	})
 	test(`!${CMD} wrong channel`,async()=>{
 		let cmdRes=await RAW_CMD_HANDLER("wrongChannel", MOCK_USERSTATE, `!${CMD}`)
@@ -54,19 +54,21 @@ describe("InfoCommand Integration",()=>{
 	test("!updateInfoCmd",async()=>{
 		const newInfo="\"new information to print\""
 		const newThrottle=1;
-		let cmdRes=await DEFAULT_CMD_HANDLER(`!updateInfoCmd ${CMD} ${newInfo} ${newThrottle}`)
-		expect(cmdRes.val).not.toHaveProperty("message")
+		let cmdRes=await DEFAULT_CMD_HANDLER(
+			`!updateInfoCmd ${CMD} ${newInfo} ${newThrottle}`
+		)
+		expect(cmdRes).toBe(Ok.EMPTY)
 
 		cmdRes=await DEFAULT_CMD_HANDLER(`!${CMD}`)
-		expect(cmdRes.val).not.toHaveProperty("message")
-		const info=cmdRes.unwrap()
-		expect(info).toBe(newInfo)
+		expect(cmdRes).toStrictEqual(Ok(InfoCommand.create(
+			CHANNEL,CMD,newInfo,newThrottle
+		)))
 	})
 	test("!deleteInfoCmd",async()=>{
 		let cmdRes=await DEFAULT_CMD_HANDLER(`!deleteInfoCmd ${CMD}`)
-		expect(cmdRes.val).not.toHaveProperty("message")
+		expect(cmdRes).toBe(Ok.EMPTY)
 
 		cmdRes=await DEFAULT_CMD_HANDLER(`!${CMD}`)
-		expect(cmdRes.val).toHaveProperty("message")
+		expect(cmdRes).toStrictEqual(Err(new Error("no such command")))
 	})
 })

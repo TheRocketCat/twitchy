@@ -38,8 +38,6 @@ export async function updateInfoCommandWorkflow(channel:string,cmd:string,info?:
 export async function getInfoCommandWorkflow(channel:string,cmd:string)
 :Promise<Result<InfoCommand,Error>>{
 	try{
-		console.log("channel:", channel)
-		console.log("CMD:", cmd)
 		const infoCmd=(await InfoCommand.get(channel,cmd))
 		.expect("get info command");
 

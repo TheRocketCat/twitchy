@@ -77,6 +77,9 @@ export async function updateInfoCommandHandler(channel:string,userstate:Userstat
 		}
 		
 		const unverifiedArgs=extractCommandArgs(msg)
+			.expect("extracting args")
+			.expect("no args provided");
+		console.log("unverified args:", unverifiedArgs)
 		const args = Joi.attempt(unverifiedArgs,Joi.array().items(
 			Joi.string().alphanum().required()
 			,Joi.string().required()
@@ -84,7 +87,7 @@ export async function updateInfoCommandHandler(channel:string,userstate:Userstat
 		));
 
 
-		updateInfoCommandWorkflow(channel,args[0],args[1],args[2])
+		return updateInfoCommandWorkflow(channel,args[0],args[1],args[2])
 	}catch(e){return Err(e)}
 }
 
@@ -95,11 +98,13 @@ export async function deleteInfoCommandHandler(channel:string,userstate:Userstat
 			return Err(new UnauthorizedError())
 		}
 		const unverifiedArgs=extractCommandArgs(msg)
+			.expect("extracting cmd args")
+			.expect("no args provided");
 		const args = Joi.attempt(unverifiedArgs,Joi.array().items(
 			Joi.string().alphanum().required()
 		));
 
-		deleteInfoCommandWorkflow(channel,args[0])
+		return deleteInfoCommandWorkflow(channel,args[0])
 	}catch(e){return Err(e)}
 }
 

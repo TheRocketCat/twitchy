@@ -1,5 +1,5 @@
-import {IClient} from "../Shared/Interfaces"
-import {AutoMsg} from "./AutoMsg"
+import {IClient} from "../shared/interfaces"
+import {AutoMsg} from "./autoMsg"
 import {minToMilliSecs} from "../shared/utilities/time"
 
 export class AutoMsgPrinter{

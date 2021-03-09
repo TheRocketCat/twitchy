@@ -4,7 +4,7 @@ import {
 } from "ts-results"
 
 import {IClient} from "../shared/interfaces"
-import {AutoMsg} from "./AutoMsg"
+import {AutoMsg} from "./autoMsg"
 
 
 //WORKFLOWS

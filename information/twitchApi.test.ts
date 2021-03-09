@@ -1,14 +1,8 @@
 import * as tmi from "tmi.js"
-import {
-    Result ,Ok ,Err
-    ,Option ,Some ,None
-} from "ts-results"
 
 import {
     createNewAutoMsgHandler
-	,
 } from "./twitchApi"
-import {WrongAmountOfArgsError} from "../shared/errors"
 
 
 //mocks

@@ -8,15 +8,15 @@ import {
 import {isOwner,UnauthorizedError} from "../auth"
 import {WrongAmountOfArgsError} from "../shared/errors"
 import {extractCommandArgs} from "../shared/utilities/args"
-import {InfoCommand} from "./InfoCommand"
+import {InfoCommand} from "./infoCommand"
 //workflows
-import {createNewAutoMsg} from "./AutoMsgWorkflows"
+import {createNewAutoMsg} from "./autoMsgWorkflows"
 import {
 	createInfoCommandWorkflow
 	,getInfoCommandWorkflow
 	,deleteInfoCommandWorkflow
 	,updateInfoCommandWorkflow
-} from "./infoCommandWorkflow"
+} from "./infoCommandWorkflows"
 
 //!createNewAutoMsg "{message}" {interval in minutes}
 export async function createNewAutoMsgHandler(channel:string,userstate:Userstate,msg:string)

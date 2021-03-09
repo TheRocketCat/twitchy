@@ -3,6 +3,7 @@ import * as tmi from "tmi.js"
 
 //TODO dubble check this is true, but seems like it or maybe username.lower
 export function isOwner(channel:string,userstate:tmi.Userstate):boolean{
+	//TODO this assumes that channel is always lower case
     return channel == "#"+userstate.username.toLowerCase()
 }
 

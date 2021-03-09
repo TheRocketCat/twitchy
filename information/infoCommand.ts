@@ -51,6 +51,7 @@ export class InfoCommand{
 
 	static async get(channel:string,cmd:string):Promise<Option<InfoCommand>>{
 		const doc:Document<InfoCommand>=await InfoCommandModel.findOne({channel,cmd})
+		console.log(doc)
 		if(!doc){
 			return None
 		}

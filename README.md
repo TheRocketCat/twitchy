@@ -31,3 +31,41 @@ Command: !coinPrice [coin symbol]
 ```sh
     npm test
 ```
+
+# Contributing
+## Tests
+### Setup
+
+#### Mocks
+#### channel
+channels nammes must be lowercase and start with #.
+example:
+```
+#iamacorrectlynamedchannel
+```
+### Expect
+Should be written so that on unsuccesfull tests the error
+message is printed by jest.
+example:
+```Javascript
+//this
+const cmdRes:Result<void,Error> = function()
+expect(cmdRes).toBe(Ok.EMPTY)
+//prints
+/*
+	ErrImpl {
+	  "err": true,
+	  "ok": false,
+	  "val": [unauthorized error: user is not authorized],
+*/
+```
+It prints like that on error because its comparing the whole structure,
+which then includes the error in val.
+
+Dont do this:
+```
+const cmdRes:Result<void,Error> = function()
+expect(cmdRes.ok).toBe(true)
+```
+it will only print that it expected true, but got false. Which
+isnt helpful to understand what error occured.

@@ -78,7 +78,7 @@ export function createCommandHandler(client:IClient)
 		}
 	}
     client.say(channel,makeResponseString(cmdResult))
-    return Ok(cmdResult)
+    return cmdResult
   }
 }
 

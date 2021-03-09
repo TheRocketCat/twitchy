@@ -1,4 +1,4 @@
-import {InfoCommand} from "./InfoCommand"
+import {InfoCommand} from "./infoCommand"
 import * as mongoose from "mongoose"
 
 beforeAll(async ()=>{

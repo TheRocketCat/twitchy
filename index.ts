@@ -5,7 +5,11 @@ import {createCommandHandler} from "./commandHandler"
 import * as mongoose from "mongoose"
 
 //TODO add pass
-mongoose.connect('mongodb://localhost:27017/twitchy', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/twitchy', {
+	useUnifiedTopology:true
+	,useNewUrlParser: true
+}
+);
 
 const autoMsgPrinter=new AutoMsgPrinter(TSC.client, 5)
 

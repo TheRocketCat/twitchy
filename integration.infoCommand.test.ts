@@ -9,7 +9,7 @@ beforeAll(async ()=>{
 	return mongoose.connect("mongodb://localhost:27017/test",{useNewUrlParser:true,useUnifiedTopology:true})
 })
 afterAll(async ()=>{
-	await mongoose.connection.dropDatabase()
+	//await mongoose.connection.dropDatabase()
 	return mongoose.connection.close()
 })
 //GLOBALS
@@ -46,7 +46,7 @@ describe("InfoCommand Integration",()=>{
 		let cmdRes=await RAW_CMD_HANDLER("wrongChannel", MOCK_USERSTATE, `!${CMD}`)
 		expect(cmdRes.val).toHaveProperty("message")
 	})
-	test(`!${CMD} no such command`,async()=>{
+	test(`!noCmdLikeThis no such command`,async()=>{
 		let cmdRes=await DEFAULT_CMD_HANDLER(`!noCmdLikeThis`)
 		expect(cmdRes.val).toHaveProperty("message")
 	})
